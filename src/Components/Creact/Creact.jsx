@@ -1,10 +1,11 @@
 import axios from "axios";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { useHistory } from "react-router";
-import "./AddPackages.css";
+import { useNavigate } from 'react-router-dom';
 
-const Addpackages = () => {
+import "./Creact.css";
+import { useForm } from 'react-hook-form';
+
+const Creact = () => {
   const {
     register,
     handleSubmit,
@@ -12,15 +13,16 @@ const Addpackages = () => {
     formState: { errors, reset },
   } = useForm();
 
+  const history = useNavigate();
   const onSubmit = (data) => {
     console.log(data);
     axios
-      .post("https://infinite-oasis-45429.herokuapp.com/package", data)
+      .post("http://localhost:5000/create", data)
       .then((res) => {
         if (res.data.acknowledged) {
-          useHistory.push("/order");
+          history("order");
           reset();
-          alert("Your order was successful");
+          alert("Created Station successfully");
         }
       });
   };
@@ -29,29 +31,20 @@ const Addpackages = () => {
 
   return (
     <div className="offset-1 col-md-8">
-      <h2>Add Packages</h2>
+      <h2>Add Redio station</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           {...register("name", { required: true })}
           className="form-control mb-3"
-          placeholder="Enter your package Name"
+          placeholder="Enter your Statoin Name"
         />
 
-        <textarea
-          {...register("descrip", { required: true })}
-          className="form-control mb-3"
-          placeholder="Package Name Description"
-        />
         <input
-          {...register("photoUrl", { required: true })}
+          {...register("station", { required: true })}
           className="form-control mb-3"
-          placeholder="Photo Url"
+          placeholder="PEnter Your Station Number"
         />
-        <input
-          {...register("price", { required: true })}
-          className="form-control mb-3"
-          placeholder="price"
-        />
+
         {errors.exampleRequired && (
           <span className="text-danger">This field is required</span>
         )}
@@ -62,4 +55,4 @@ const Addpackages = () => {
   );
 };
 
-export default Addpackages;
+export default Creact;

@@ -3,22 +3,41 @@ import { Button } from "react-bootstrap";
 import "./Login.css";
 import useFirebase from './../hooks/userFirebase';
 import { useForm } from 'react-hook-form';
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { signInUsingGoogle, signInUser, registerUser } = useFirebase();
-
+  const { user, signInUsingGoogle, signInUser, } = useFirebase();
+  const history = useNavigate();
+  console.log(user)
 
   const handleGoogleLogin = () => {
     signInUsingGoogle();
+    if (user) {
+      history('/dashboard')
+
+    } else if (!user.email) {
+      history(user.email = '')
+    }
+
   };
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
 
   } = useForm();
   const onSubmit = (data) => {
-    registerUser(data.email, data.password);
+    signInUser(data.email, data.password);
+    reset()
+    if (user) {
+      history('/dashboard')
+
+    } else if (!user) {
+      history("./login")
+    }
+    console.log(user)
   }
 
   return (
@@ -32,6 +51,9 @@ const Login = () => {
           {errors.password && <p className="text-danger">Last password is required.</p>}
           <input type="submit" vlaue="login" className="btn btn-danger mt-3 w-100" />
         </form>
+        <Link to="/signup">
+          Signup here
+        </Link>
 
         <div className="d-grid gap-2 mt-3 py-3 ">
           <Button
