@@ -20,7 +20,7 @@ const Creact = () => {
       .post("http://localhost:5000/create", data)
       .then((res) => {
         if (res.data.acknowledged) {
-          history("order");
+          history("show");
           reset();
           alert("Created Station successfully");
         }
